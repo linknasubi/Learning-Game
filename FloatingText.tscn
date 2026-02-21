@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cfg20jhpeffre"]
+
+[ext_resource type="Script" uid="uid://c36mlifjf8yly" path="res://FloatingText.gd" id="1_bmcqi"]
+
+[node name="Label" type="Label" unique_id=509124360]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("1_bmcqi")

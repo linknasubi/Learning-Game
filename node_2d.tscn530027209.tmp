@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://bls2nwi65cm7k"]
+
+[ext_resource type="Script" uid="uid://seqd0cgc51r3" path="res://node_2d.gd" id="1_q6r6c"]
+[ext_resource type="Script" uid="uid://u6mm1boc7wl4" path="res://character_body_2d.gd" id="2_0hol4"]
+[ext_resource type="Texture2D" uid="uid://baanayslb34b6" path="res://kenney_medieval-rts/PNG/Retina/Unit/medievalUnit_04.png" id="2_epypp"]
+[ext_resource type="Script" uid="uid://dunihdqb6174x" path="res://health_bar.gd" id="3_hqns4"]
+[ext_resource type="Script" uid="uid://dqfxek55a6nx2" path="res://health.gd" id="5_d21ai"]
+[ext_resource type="Resource" uid="uid://4l6fk2b6m02y" path="res://stats_player.tres" id="6_4d7sh"]
+[ext_resource type="Script" uid="uid://w2dc1xjlb4wm" path="res://leveling.gd" id="6_rj586"]
+[ext_resource type="Script" uid="uid://ch40cqj05805x" path="res://player_attack.gd" id="7_4d7sh"]
+[ext_resource type="Texture2D" uid="uid://cpdiln2dflix" path="res://kenney_medieval-rts/PNG/Retina/Tile/medievalTile_28.png" id="7_k73cj"]
+[ext_resource type="Script" uid="uid://cr3pbr3grhf3l" path="res://spawner.gd" id="9_4d7sh"]
+[ext_resource type="Script" uid="uid://dnxd1jcj66rb8" path="res://sprite_2d.gd" id="9_ta5nu"]
+[ext_resource type="Script" uid="uid://c6llifyr0m2sc" path="res://xp_bar.gd" id="10_d2bti"]
+[ext_resource type="PackedScene" uid="uid://dd8uwcgqciba8" path="res://enemy.tscn" id="10_ir8iy"]
+[ext_resource type="Script" uid="uid://53aig6nmo21p" path="res://control_manager.gd" id="12_x0ka3"]
+[ext_resource type="Script" uid="uid://cxnw83jp22j2k" path="res://hero_command_controller.gd" id="13_0h7mo"]
+[ext_resource type="PackedScene" uid="uid://1hwcwimklhh1" path="res://cards_layer.tscn" id="14_nr8wp"]
+[ext_resource type="Script" uid="uid://drq2vlhijbypu" path="res://level_loader.gd" id="17_flf07"]
+[ext_resource type="PackedScene" uid="uid://tu1rue3mfh0o" path="res://Level_Bridge.tscn" id="18_k73cj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0hol4"]
+radius = 377.84
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rj586"]
+
+[sub_resource type="AudioStream" id="AudioStream_hqns4"]
+
+[sub_resource type="AudioStream" id="AudioStream_x0ka3"]
+
+[node name="WorldCore" type="Node2D" unique_id=1273792939]
+z_index = 1000
+script = ExtResource("1_q6r6c")
+
+[node name="Agent" type="CharacterBody2D" parent="." unique_id=2040600384 groups=["heroes"]]
+position = Vector2(-52, -26)
+script = ExtResource("2_0hol4")
+stats = ExtResource("6_4d7sh")
+goal_weight = 1.5
+avoid_weight = 1.25
+wander_strength = 0.04
+
+[node name="Health" type="Node" parent="Agent" unique_id=1507659283]
+script = ExtResource("5_d21ai")
+stats = ExtResource("6_4d7sh")
+metadata/_custom_type_script = "uid://dqfxek55a6nx2"
+
+[node name="HealthBar" type="Node2D" parent="Agent" unique_id=260764151 node_paths=PackedStringArray("health")]
+position = Vector2(52, 26)
+script = ExtResource("3_hqns4")
+health = NodePath("../Health")
+
+[node name="AttackArea" type="Area2D" parent="Agent" unique_id=1712674148]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Agent/AttackArea" unique_id=1557455437]
+shape = SubResource("CircleShape2D_0hol4")
+debug_color = Color(0.92579424, 4.5242905e-05, 0.6768123, 0.41960785)
+
+[node name="PlayerAttack" type="Node" parent="Agent/AttackArea" unique_id=1695740513 node_paths=PackedStringArray("owner_body")]
+script = ExtResource("7_4d7sh")
+stats = ExtResource("6_4d7sh")
+owner_body = NodePath("../..")
+metadata/_custom_type_script = "uid://ch40cqj05805x"
+
+[node name="Camera2D" type="Camera2D" parent="Agent" unique_id=1978498056]
+zoom = Vector2(0.7, 0.7)
+
+[node name="Floor" type="Sprite2D" parent="Agent/Camera2D" unique_id=2138880813]
+z_index = -2
+texture_repeat = 2
+position = Vector2(54, 52)
+texture = ExtResource("7_k73cj")
+region_enabled = true
+region_rect = Rect2(-555, -481, 4719, 2794)
+
+[node name="Sprite2D" type="Sprite2D" parent="Agent" unique_id=1790097762]
+z_index = 3
+texture = ExtResource("2_epypp")
+script = ExtResource("9_ta5nu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Agent" unique_id=961467659]
+shape = SubResource("CircleShape2D_rj586")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="Agent" unique_id=467130580]
+
+[node name="Leveling" type="Node" parent="Agent" unique_id=194623126]
+script = ExtResource("6_rj586")
+stats = ExtResource("6_4d7sh")
+metadata/_custom_type_script = "uid://w2dc1xjlb4wm"
+
+[node name="XpBar" type="Node2D" parent="Agent" unique_id=1838500690]
+script = ExtResource("10_d2bti")
+
+[node name="Spawner" type="Node2D" parent="." unique_id=621096693 node_paths=PackedStringArray("agent")]
+script = ExtResource("9_4d7sh")
+enemy_scene = ExtResource("10_ir8iy")
+agent = NodePath("../Agent")
+
+[node name="ChargeSFX" type="AudioStreamPlayer2D" parent="Spawner" unique_id=823516634]
+stream = SubResource("AudioStream_hqns4")
+volume_db = 24.0
+
+[node name="ReleaseSFX" type="AudioStreamPlayer2D" parent="Spawner" unique_id=1210420198]
+stream = SubResource("AudioStream_x0ka3")
+volume_db = 0.895
+
+[node name="ControlManager" type="Node2D" parent="." unique_id=1043509492]
+script = ExtResource("12_x0ka3")
+spawner_path = NodePath("../Spawner")
+hero_path = NodePath("../Agent")
+hero_command_path = NodePath("../HeroCommandController")
+hud_cards_path = NodePath("../CanvasLayer")
+
+[node name="HeroCommandController" type="Node2D" parent="." unique_id=1362115875]
+script = ExtResource("13_0h7mo")
+hero_path = NodePath("../Agent")
+
+[node name="CanvasLayer" parent="." unique_id=318927106 instance=ExtResource("14_nr8wp")]
+
+[node name="LevelRoot" type="Node2D" parent="." unique_id=2098681917]
+z_index = -1
+
+[node name="LevelLoader" type="Node2D" parent="." unique_id=81216291]
+script = ExtResource("17_flf07")
+player_path = NodePath("../Agent")
+initial_level = ExtResource("18_k73cj")

@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://dd8uwcgqciba8"]
+
+[ext_resource type="Script" uid="uid://dgs610vcu8smb" path="res://enemy.gd" id="1_7k104"]
+[ext_resource type="Texture2D" uid="uid://bqbnqsiogmrm5" path="res://kenney_medieval-rts/PNG/Retina/Unit/medievalUnit_07.png" id="2_4gyqm"]
+[ext_resource type="Script" uid="uid://dqfxek55a6nx2" path="res://health.gd" id="3_qi2p4"]
+[ext_resource type="Script" uid="uid://dnxd1jcj66rb8" path="res://sprite_2d.gd" id="3_wujgv"]
+[ext_resource type="Resource" uid="uid://d2mrp4ew85t60" path="res://stats_enemy_basic.tres" id="4_iifgy"]
+[ext_resource type="Script" uid="uid://br823ko14tq02" path="res://scratch_attack.gd" id="5_epg4t"]
+[ext_resource type="Script" uid="uid://cgjfj81ih7rd5" path="res://scratch_vfx.gd" id="6_3yqyl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4gyqm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3yqyl"]
+radius = 30.0
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1021291114 groups=["enemies"]]
+script = ExtResource("1_7k104")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1673921734]
+texture = ExtResource("2_4gyqm")
+script = ExtResource("3_wujgv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=760030753]
+shape = SubResource("CircleShape2D_4gyqm")
+
+[node name="Health" type="Node" parent="." unique_id=342361306]
+script = ExtResource("3_qi2p4")
+stats = ExtResource("4_iifgy")
+metadata/_custom_type_script = "uid://dqfxek55a6nx2"
+
+[node name="ScratchAttack" type="Node2D" parent="." unique_id=1399116404 node_paths=PackedStringArray("owner_body", "attack_area")]
+script = ExtResource("5_epg4t")
+stats = ExtResource("4_iifgy")
+owner_body = NodePath("..")
+attack_area = NodePath("../ScratchArea")
+
+[node name="ScratchVFx" type="Node2D" parent="ScratchAttack" unique_id=589313940]
+script = ExtResource("6_3yqyl")
+
+[node name="ScratchArea" type="Area2D" parent="." unique_id=1726507748]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScratchArea" unique_id=1406222601]
+shape = SubResource("CircleShape2D_3yqyl")
